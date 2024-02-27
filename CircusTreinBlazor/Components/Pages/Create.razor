@@ -1,0 +1,76 @@
+@page "/"
+@using CircusTreinBlazor.DTO
+@using CircusTrein
+@using AnimalPreset = CircusTreinBlazor.DTO.AnimalPreset
+@inject TrainService TrainService
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+<PageTitle>Treinstel maken</PageTitle>
+
+<h1>Nieuw treinstel maken</h1>
+
+<div style="display:block; margin-top: 0.5rem; margin-bottom: 0.5rem">
+    @foreach (var p in _animalPresets)
+    {
+        <AnimalPreset Image="@p.Image" OnSelect="() => { TrainService.AddAnimalToPool(p.Animal); StateHasChanged(); }"></AnimalPreset>
+    }
+</div>
+
+<RadzenTemplateForm TItem="AnimalDto" Data="@Model" Submit="Submit">
+    <RadzenLabel Component="Formaat" Text="Formaat" style="display: block; margin-bottom: 1rem"></RadzenLabel>
+    <RadzenDropDown bind-Value="@Model.Format" TValue="Format" Data="@_formats" Name="Formaat" style="margin-bottom: 1rem">
+    </RadzenDropDown>
+    <RadzenRequiredValidator Component="Formaat"></RadzenRequiredValidator>
+    <RadzenLabel Component="Vleeseter" Text="Vleeseter" style="display: block; margin-bottom: 1rem"></RadzenLabel>
+    <RadzenCheckBox bind-Value="Model.Carnivore" TValue="bool" Name="Vleeseter" style="margin-bottom: 1rem"></RadzenCheckBox>
+    <RadzenRequiredValidator Component="Vleeseter"></RadzenRequiredValidator>
+    <br/>
+    <RadzenButton ButtonType="ButtonType.Submit">Toevoegen</RadzenButton>
+</RadzenTemplateForm>
+
+@* <div id="animal-list"> *@
+@*     @foreach (Animal animal in TrainService.Animals) *@
+@*     { *@
+@*         <AnimalDisplay Animal="@animal"></AnimalDisplay> *@
+@*     } *@
+@* </div> *@
+
+<div id="train-list">
+    @foreach (var train in TrainService.GetTrains())
+    {
+        <div class="train">
+            @foreach (var wagon in train.Wagons)
+            {
+                <div class="wagon">
+                    <span class="wagon-info"></span>
+                    <div class="wagon-animals">
+                        @foreach (Animal animal in wagon.Animals)
+                        {
+                            <AnimalDisplay Animal="@animal"></AnimalDisplay>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code
+{
+    public AnimalDto Model = new();
+
+    readonly List<AnimalPreset> _animalPresets =
+    [
+        new AnimalPreset(new Animal(false, Format.Small), "img/chicken.webp"),
+        new AnimalPreset(new Animal(false, Format.Large), "img/cow.jpg")
+    ];
+
+    readonly IEnumerable<Format> _formats = Enum.GetValues(typeof(Format)).Cast<Format>();
+
+    void Submit()
+    {
+        TrainService.AddAnimalToPool(new Animal(Model.Carnivore, Model.Format));
+    }
+}
+

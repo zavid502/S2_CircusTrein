@@ -1,0 +1,14 @@
+@using CircusTrein
+<div class="animal-display">
+    <span class="animal-format">@Enum.GetName(this.Animal.Format)</span>
+    <span class="animal-carnivore">@(this.Animal.Carnivore ? "Carnivoor" : "Herbivoor")</span>
+</div>
+
+<style>
+
+</style>
+
+@code {
+    [Parameter] public Animal Animal { get; set; } = null!;
+
+}

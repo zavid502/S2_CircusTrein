@@ -1,0 +1,30 @@
+@code {
+    [Parameter] public Action OnSelect { get; set; } = null!;
+    [Parameter] public string Image { get; set; } = null!;
+}
+
+<div @onclick="OnSelect" class="animal-preset" style="
+background: url(@Image);
+    display: inline-block;
+    width: 5rem;
+    height: 8rem;
+    margin-right: 0.3rem;
+    background-size: cover;
+    transition: transform 100ms, filter 100ms;
+    cursor: pointer;
+    border-radius: .3rem;
+    background-position: center;
+">
+    
+</div>
+
+<style>
+.animal-preset {
+
+}
+
+.animal-preset:hover {
+filter: brightness(120%) drop-shadow(.3rem .3rem 1rem rgba(0,0,0,0.1));
+transform: translateY(-0.3rem);
+}
+</style>
