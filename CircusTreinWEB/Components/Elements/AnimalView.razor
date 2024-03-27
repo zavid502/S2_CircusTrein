@@ -1,0 +1,9 @@
+@code {
+    [Parameter] public required Animal Animal { get; set; }
+    [Parameter] public required Action<Animal> OnClicked { get; set; }
+}
+
+<div @onclick="() => OnClicked.Invoke(Animal)" class="d-flex flex-column border rounded me-2 p-2">
+    <span class="fs-5 fw-bold @(Animal.Carnivore ? "text-warning" : string.Empty)">@(Animal.Carnivore ? "Carnivore" : "Herbivore")</span>
+    <span class="fs-6">@Enum.GetName(Animal.Format)</span>
+</div>

@@ -1,0 +1,15 @@
+@code {
+    [Parameter] public required AnimalTemplate AnimalTemplate { get; set; }
+    [Parameter] public required Action<AnimalTemplate> OnClicked { get; set; }
+
+    void OnClickHandler()
+    {
+        OnClicked.Invoke(AnimalTemplate);
+    }
+}
+
+<button @onclick="OnClickHandler" class="d-flex flex-column border-0 bg-light shadow-sm rounded" style="width: 10rem; cursor: pointer; z-index: 3">
+    <img class="w-100 img-fluid shadow-sm" style="aspect-ratio: 1 / 1" src="@AnimalTemplate.Image" alt="animal"/>
+    <span class="d-block mt-1 mb-1 fs-5 fw-bold">@AnimalTemplate.Name</span>
+    <small>@(Enum.GetName(AnimalTemplate.Animal.Format)!) @(AnimalTemplate.Animal.Carnivore ? "Carnivore" : "Herbivore")</small>
+</button>

@@ -5,8 +5,7 @@ public class TrainService
     private readonly List<Animal> _animals = [];
     private readonly List<Wagon> _wagons = [];
 
-    public IEnumerable<Animal> Animals => _animals.AsEnumerable();
-    public IEnumerable<Wagon> Wagons => _wagons.AsEnumerable();
+    public IReadOnlyCollection<Animal> Animals => _animals;
     
     public void AddAnimalToPool(Animal animal)
     {
@@ -28,7 +27,7 @@ public class TrainService
     public List<Train> GetTrains()
     {
         List<Train> trains = [];
-        var wagons = SorterShort.SortAnimals(_animals);
+        var wagons = Sorter.SortAnimals(_animals);
 
         foreach (var wagon in wagons)
         {

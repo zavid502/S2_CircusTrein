@@ -1,0 +1,81 @@
+@page "/"
+
+@rendermode InteractiveServer
+
+@code {
+    TrainService _trainService = new();
+
+    List<AnimalTemplate> _templates = new List<AnimalTemplate>()
+    {
+        new AnimalTemplate()
+        {
+            Name = "Chicken",
+            Animal = new Animal(false, Format.Small),
+            Image = "https://media.istockphoto.com/id/93217355/nl/foto/brown-hen.jpg?s=2048x2048&w=is&k=20&c=CI2xl-C7bvUU5NEmD4UOd23-3aMRktMEw-MWneKhBKg="
+        },
+        new AnimalTemplate()
+        {
+            Name = "Dog",
+            Animal = new Animal(true, Format.Medium),
+            Image = "https://cdn.pixabay.com/photo/2016/12/13/05/15/puppy-1903313_1280.jpg"
+        },
+        new AnimalTemplate()
+        {
+            Name = "Elephant",
+            Animal = new Animal(true, Format.Large),
+            Image = "https://upload.wikimedia.org/wikipedia/commons/3/37/African_Bush_Elephant.jpg"
+        },
+        new AnimalTemplate()
+        {
+            Name = "Goldfish",
+            Animal = new Animal(false, Format.Small),
+            Image = "https://assets.petco.com/petco/image/upload/f_auto,q_auto/1053400-center-1"
+        },
+        new AnimalTemplate()
+        {
+            Name = "Horse",
+            Animal = new Animal(true, Format.Large),
+            Image = "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg"
+        }
+    };
+
+    public void TemplateOnClick(AnimalTemplate template)
+    {
+        _trainService.AddAnimalToPool(template.Animal);
+        StateHasChanged();
+    }
+
+    public void AnimalOnClick(Animal animal)
+    {
+        _trainService.TryRemoveAnimalFromPool(animal);
+        StateHasChanged();
+    }
+
+}
+
+<h1 class="fs-1 mb-2 fw-bold">Circustrein</h1>
+<div class="d-flex flex-wrap flex-row mb-2">
+    @foreach (var template in _templates)
+    {
+        <AnimalTemplateView AnimalTemplate="template" OnClicked="TemplateOnClick"/>
+    }
+</div>
+
+<div class="d-flex flex-wrap flex-row">
+    @foreach (Train train in _trainService.GetTrains())
+    {
+        <div class="d-flex flex-column mt-3" style="width: 15rem">
+            <h5>Train</h5>
+            @foreach (Wagon wagon in train.Wagons)
+            {
+                <div class="mt-2 mb-2 p-1 border">
+                    <h6>Wagon</h6>
+                    @foreach (Animal animal in wagon.Animals)
+                    {
+                        <AnimalView Animal="animal" OnClicked="AnimalOnClick"/>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
